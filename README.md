@@ -15,6 +15,8 @@ Once the grid has been created, the generator fetches two more random numbers to
 The closer the length of the requested password is to the length of the origin string, the more likely coordinates will be repeated.
 
 ## Options
+Form the help (`randpass -h`):
+
 ```
 Options:
     <n> = number of characters in password returned
