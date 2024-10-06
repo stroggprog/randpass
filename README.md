@@ -5,6 +5,10 @@ A simple, yet flexible, random password generator.
   - Passwords are of an arbitrarily specified length
   - All output is to STDERR except the generated password
 
+Requirements: PHP >5.4
+
+_built and tested with php 8.2_
+
 ## How it works
 The passwords are generated from a string of UTF-8 characters, known as the origin string. The string is used to generate a grid of randomly positioned characters. Each character appears exactly n<sup>n</sup> times, where `n` is the number of characters in the initial string.
 
@@ -15,7 +19,7 @@ Once the grid has been created, the generator fetches two more random numbers to
 The closer the length of the requested password is to the length of the origin string, the more likely coordinates will be repeated.
 
 ## Options
-Form the help (`randpass -h`):
+From the help (`randpass -h`):
 
 ```
 Options:
