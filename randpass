@@ -1,0 +1,99 @@
+#!/usr/bin/php
+<?php
+define( "VER", "2.0.3" );
+
+$parse = array( "len" => 64, "help" => false, "grid" => false, "quiet" => false, "limit" => false, "echo" => false );
+
+function cmdParameters(){
+	global $argc, $argv, $parse;
+	for( $a = 1; $a < $argc; $a++ ){
+
+		$token = strtolower($argv[$a]);
+		if( substr( $token, 0, 1 ) == "-" ){
+			if( strpos($token, "e") ) $parse["echo"] = true;
+			if( strpos($token, "g") ) $parse["grid"] = true;
+			if( strpos($token, "h") ) $parse["help"] = true;
+			if( strpos($token, "l") ) $parse["limit"] = true;
+			if( strpos($token, "q") ) $parse["quiet"] = true;
+		}
+		else if( is_numeric($token) ){
+			$parse["len"] = (int)$token;
+		}
+	}
+	if( $parse["help"] ){
+		help();
+		exit;
+	}
+}
+
+function version(){
+	return "RandPass v".VER."\n";
+}
+
+function help(){
+	fwrite(STDERR,version()."Options:\n".
+		"    <n> = number of characters in password returned\n".
+		"    -e  = echo password to STDERR (still also goes to STDOUT)\n".
+		"    -g  = print randomly generated grid result is generated from\n".
+		"    -h  = print this help and exit\n".
+		"    -l  = limit output (almost quiet, just version and password)\n".
+		"    -q  = quiet mode (only print password)\n\n".
+		"Options can be strung together, e.g. -gq\n".
+		"    -q overrides -l but not -e\n".
+		"    -h overrides everything\n\n".
+		"Note that only the password is output to STDOUT, everything else goes to STDERR,\n".
+		"so redirection to a file is safe as only the password is redirected.\n");
+}
+
+function makeLineFromLine( $in ){
+	$out = "";
+	While( strlen($in) > 1 ){
+		$v = random_int(0, strlen( $in )-1 );
+		$byte = substr($in, $v, 1);
+		if( $byte == "�" ){
+			// debug code to catch UTF-8 errors
+			echo "$v = $in\n";
+		}
+		$out .= $byte;
+		$in = str_replace( $byte, "", $in );
+	}
+	return $out;
+}
+
+function printGrid( $box ){
+	foreach( $box as $o ) fwrite(STDERR,"$o\n");
+}
+
+cmdParameters(); // will exit if help requested
+
+$line = "1!2\"34\$5%6^7&8*9(0)-_=+qQwWeErRtTyYuUiIoOpP[{]}aAsSdDfFgGhHjJkKlL;:'@#~zZxXcCvVbBnNmM,<.>/?";
+
+$box = array();
+$n = strlen($line);
+
+for( $a = 0; $a < $n; $a++ ){
+	$box[] = makeLineFromLine( $line );
+}
+
+if( $parse["grid"] ) printGrid( $box );
+
+$len = $parse["len"];
+
+$r = "";
+for( $i = 0; $i < $len; $i++ ){
+	$x = random_int(0, $n-1 );
+	$y = random_int(0, $n-1 );
+	$r .= substr( $box[$y], $x, 1 );
+}
+
+if( !$parse["quiet"] ){
+	fwrite(STDERR,version());
+	if( !$parse["limit"] ){
+		fwrite(STDERR, "$n base chars used\n".
+			($n*$n)." randomly organised chars in grid ($n*$n)\n".
+			"$len character password generated\n");
+	}
+}
+if( $parse["echo"] ) fwrite(STDERR, "$r\n");
+echo "$r\n";
+?>
