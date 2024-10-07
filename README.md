@@ -28,12 +28,18 @@ Options:
     -g  = print randomly generated grid result is generated from
     -h  = print this help and exit
     -l  = limit output (almost quiet, just version and password)
+    -p  = print origin and exit
     -q  = quiet mode (only print password)
 
 Options can be strung together, e.g. -gq
-    -q overrides -l but not -e
     -h overrides everything
+    -p overrides everything except -h
+    -q overrides -l but not -e
 
 Note that only the password is output to STDOUT, everything else goes to STDERR,
 so redirection to a file is safe as only the password is redirected.
 ```
+
+If '?' character-on-a-background starts appearing in your passwords, then you need to remove any characters from the origin string that were created using the `AltGr` key, as these are almost certainly multi-byte characters, and this generator only works with single-byte UTF-8 characters. By default, there are no multi-byte characters in the origin.
+
+You can include non-keyboard characters, such as `╚`, `╩` & `╝` etc., but these are best avoided for the obvious reason that they are hard to remember how to type since you need to know their ASCII codes. It can also be confusing too, as `}` (AltGr+0) and `}` (Shift+]) may look the same, but since they were created by different key combinations there is no guarantee they have the same UTF-8 code.
