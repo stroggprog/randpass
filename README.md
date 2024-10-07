@@ -1,6 +1,6 @@
 # randpass
 
-A simple, yet flexible, random password generator.
+A simple, yet flexible, command-line random password generator.
 
   - Passwords are of an arbitrarily specified length (default=64)
   - All output is to STDERR except the generated password
