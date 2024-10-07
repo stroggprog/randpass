@@ -2,7 +2,7 @@
 
 A simple, yet flexible, random password generator.
 
-  - Passwords are of an arbitrarily specified length
+  - Passwords are of an arbitrarily specified length (default=64)
   - All output is to STDERR except the generated password
 
 Requirements: PHP >5.4
