@@ -1,8 +1,21 @@
 #!/usr/bin/php
 <?php
-define( "VER", "2.0.3" );
+/*
+	Copyright Philip P. Ide 2020, 2024
+    This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
-$parse = array( "len" => 64, "help" => false, "grid" => false, "quiet" => false, "limit" => false, "echo" => false );
+    This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License along with this program. If not, see
+    <https://www.gnu.org/licenses/>.
+*/
+
+define( "VER", "2.0.4" );
+
+$parse = array( "len" => 64, "help" => false, "grid" => false, "quiet" => false,
+				"limit" => false, "echo" => false, "porig" => false );
+
+$origin = "1!2\"34\$5%6^7&8*9(0)-_=+qQwWeErRtTyYuUiIoOpP[{]}aAsSdDfFgGhHjJkKlL;:'@#~zZxXcCvVbBnNmM,<.>/?`|";
 
 function cmdParameters(){
 	global $argc, $argv, $parse;
@@ -14,6 +27,7 @@ function cmdParameters(){
 			if( strpos($token, "g") ) $parse["grid"] = true;
 			if( strpos($token, "h") ) $parse["help"] = true;
 			if( strpos($token, "l") ) $parse["limit"] = true;
+			if( strpos($token, "p") ) $parse["porig"] = true;
 			if( strpos($token, "q") ) $parse["quiet"] = true;
 		}
 		else if( is_numeric($token) ){
@@ -22,7 +36,7 @@ function cmdParameters(){
 	}
 	if( $parse["help"] ){
 		help();
-		exit;
+		exit(0);
 	}
 }
 
@@ -37,10 +51,12 @@ function help(){
 		"    -g  = print randomly generated grid result is generated from\n".
 		"    -h  = print this help and exit\n".
 		"    -l  = limit output (almost quiet, just version and password)\n".
+		"    -p  = print origin and exit\n".
 		"    -q  = quiet mode (only print password)\n\n".
 		"Options can be strung together, e.g. -gq\n".
-		"    -q overrides -l but not -e\n".
-		"    -h overrides everything\n\n".
+		"    -h overrides everything\n".
+		"    -p overrides everything except -h\n".
+		"    -q overrides -l but not -e\n\n".
 		"Note that only the password is output to STDOUT, everything else goes to STDERR,\n".
 		"so redirection to a file is safe as only the password is redirected.\n");
 }
@@ -66,13 +82,18 @@ function printGrid( $box ){
 
 cmdParameters(); // will exit if help requested
 
-$line = "1!2\"34\$5%6^7&8*9(0)-_=+qQwWeErRtTyYuUiIoOpP[{]}aAsSdDfFgGhHjJkKlL;:'@#~zZxXcCvVbBnNmM,<.>/?";
+$n = strlen($origin);
+
+if( $parse["porig"] ){
+	echo "$n\n";
+	echo "$origin\n";
+	exit(0);
+}
 
 $box = array();
-$n = strlen($line);
 
 for( $a = 0; $a < $n; $a++ ){
-	$box[] = makeLineFromLine( $line );
+	$box[] = makeLineFromLine( $origin );
 }
 
 if( $parse["grid"] ) printGrid( $box );
