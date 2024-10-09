@@ -10,7 +10,7 @@ Requirements: PHP >5.4
 _built and tested with php 8.2_
 
 ## How it works
-The passwords are generated from a string of UTF-8 characters, known as the origin string. The string is used to generate a grid of randomly positioned characters. Each character appears exactly n<sup>n</sup> times, where `n` is the number of characters in the initial string.
+The passwords are generated from a string of UTF-8 characters, known as the origin string. The string is used to generate a grid of randomly positioned characters. Each character appears exactly n<sup>n</sup> times, where `n` is the number of characters in the origin string.
 
 Further, each character only appears once per line of the grid. The number of times it may appear in each column is somewhere in the range 0-n.
 
